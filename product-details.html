@@ -1,0 +1,148 @@
+<div *ngIf="isLoading" class="details-skeleton">
+  <div class="skeleton-card">
+    <div class="skeleton-image shimmer"></div>
+    <div class="skeleton-info">
+      <div class="skeleton-line lg shimmer"></div>
+      <div class="skeleton-line md shimmer"></div>
+      <div class="skeleton-price-row">
+        <div class="skeleton-price shimmer"></div>
+        <div class="skeleton-tag shimmer"></div>
+      </div>
+      <div class="skeleton-stars shimmer"></div>
+      <div class="skeleton-tabs">
+        <div class="tab shimmer"></div>
+        <div class="tab shimmer"></div>
+        <div class="tab shimmer"></div>
+      </div>
+      <div class="skeleton-text shimmer"></div>
+      <div class="skeleton-text shimmer"></div>
+      <div class="skeleton-text short shimmer"></div>
+      <div class="skeleton-btn shimmer"></div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="!isLoading && product" class="details-container">
+  <div class="product-card">
+
+    <div class="image-section">
+      <div class="main-image-wrapper">
+        <button class="nav-btn prev" (click)="prevImg()">‹</button>
+        <img 
+          [src]="product.Images?.length ? product.Images[currentImgIndex] : (product.image || '')" 
+          alt="{{ product.Name || product.name }}" 
+          class="product-main-img"
+        >
+        <button class="nav-btn next" (click)="nextImg()">›</button>
+        <button class="share-btn" (click)="shareProduct(product)">
+          <i class="fa-solid fa-share-nodes"></i>
+        </button>
+      </div>
+
+      <div class="dots-container">
+        <span 
+          *ngFor="let img of (product.Images || [product.image]); let i = index" 
+          [class.active]="i === currentImgIndex" 
+          (click)="setMainImage(i)"
+        ></span>
+      </div>
+    </div>
+
+    <div class="info-section">
+      
+      <div style="display: flex; flex-direction: column; ">
+        <h1 class="product-name" style="margin: 0px; padding: 0px; line-height: 1.1; font-weight: 590; color: #000; font-size: 20px;">
+          {{ getProductName(product.Name || product.name) }}
+        </h1>
+        <span class="product-category-details" style="color: #333333; font-weight: 450; line-height: 1.1; font-size: 14px; padding: 0px; margin: 0px;">
+          {{ mapCategory(product.group || product.category || product.Category, product.Name || product.name) }}
+        </span>
+      </div>
+
+      <div class="meta-row" style="display: flex; justify-content: space-between; align-items: center">
+        <div class="size-container">
+          <div class="size-badge active">
+            {{ getWeight(product.Name || product.name) }}
+          </div>
+        </div>
+
+        <div class="rating-box">
+          <div class="rating-value">
+            <div class="star-bg">
+              <div class="star-wrapper">
+                <i class="fa-regular fa-star outline-star"></i>
+                <i 
+                  class="fa-solid fa-star fill-star" 
+                  [style.--fill-percent]="fillPercent + '%'"
+                ></i>
+              </div>
+            </div>
+            <span>{{ product.rating || product.Rating || 4.5 }}</span>
+          </div>
+          <p class="rating-count" style="">Based on 5 Reviews</p>
+        </div>
+      </div>
+
+      <div class="price-row" style="display: flex; align-items: center; gap: 10px; ">
+        <div class="mrp-box" *ngIf="product.price || product.MRP">
+          <span class="strike">₹{{ formatPrice(product.price || product.MRP) }}</span>
+        </div>
+
+        <div class="discount-tag" *ngIf="(product.price || product.MRP) > (product.discount || product.Discount)">
+          {{ getDiscountPercentage(product.price || product.MRP, product.discount || product.Discount) }}% Off
+        </div>
+      </div>
+
+      <div class="selling-price" style="">
+        ₹ {{ formatPrice(product.discount || product.Discount || product.price || product.MRP) }}
+      </div>
+
+      <div class="tabs-header">
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'description'" 
+          (click)="setActiveTab('description')"
+        >
+          Description
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'uniqueness'" 
+          (click)="setActiveTab('uniqueness')"
+        >
+          Uniqueness
+        </button>
+        <button 
+          class="tab-btn" 
+          [class.active]="activeTab === 'benefits'" 
+          (click)="setActiveTab('benefits')"
+        >
+          Benefits
+        </button>
+      </div>
+
+      <div class="tab-content">
+        <p *ngIf="activeTab === 'description'">
+          {{ getProductInfo().description }}
+        </p>
+        <p *ngIf="activeTab === 'uniqueness'">
+          {{ getProductInfo().uniqueness }}
+        </p>
+        <p *ngIf="activeTab === 'benefits'">
+          {{ getProductInfo().benefits || 'Health benefits information coming soon.' }}
+        </p>
+      </div>
+
+      <button class="footer-add-btn" (click)="addToCart(product)">
+        <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+      </button>
+
+    </div>
+  </div>
+
+  <div class="success-popup" [class.show]="showPopup">
+    <div class="popup-content">
+      {{ popupMessage }}
+    </div>
+  </div>
+</div>

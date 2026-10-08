@@ -1,0 +1,127 @@
+<div class="success-popup" *ngIf="showPopup">
+  <i class="fa-solid fa-circle-check"></i>
+  <span>{{ popupMessage }}</span>
+</div>
+
+<div class="products-page-container">
+
+  <div class="category-sticky-bar">
+    <div class="category-pills">
+      <button
+        *ngFor="let cat of categories"
+        (click)="showMenu(cat)"
+        [class.active]="activeMenu === cat"
+        class="category-pill"
+      >
+        {{ cat | titlecase }}
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="isLoading" class="skeleton-grid">
+    <div class="skeleton-card" *ngFor="let i of [1,2,3,4,5,6]">
+      <div class="skeleton-image shimmer"></div>
+      <div class="skeleton-content">
+        <div class="skeleton-title shimmer"></div>
+        <div class="skeleton-size shimmer"></div>
+        <div class="skeleton-price shimmer"></div>
+        <div class="skeleton-button shimmer"></div>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!isLoading && filteredProducts.length === 0" class="empty-products">
+    <img src="/image/brand_logo.png" alt="No Products">
+    <h2></h2>
+    <p></p>
+  </div>
+
+  <div *ngIf="!isLoading && filteredProducts.length > 0">
+    <div class="premium-grid">
+
+      <div
+        class="product-card"
+        *ngFor="let product of filteredProducts"
+        (click)="goToDetails(product.id)"
+      >
+        <div class="img-box">
+          <img [src]="product.image" alt="{{product.name}}">
+          <button class="share-btn-mini" (click)="shareProduct($event, product)">
+            <i class="fa-solid fa-share-nodes"></i>
+          </button>
+        </div>
+
+        <div class="card-body">
+          
+          <div class="title-group" style="margin-bottom: 12px;">
+            <h3 class="product-title" style="margin: 0 0 2px 0;  line-height: 1.2;">
+              {{ getProductName(product.name) }}
+            </h3>
+            <span class="product-category" style="display: block;  color: #333;">
+              {{ product.category }}
+            </span>
+          </div>
+
+          <div class="main-row">
+            <div class="info-column">
+              <div class="size-row">
+                <span class="size-badge active">
+                  {{ getWeight(product.name) }}
+                </span>
+              </div>
+
+              <div class="price-stack">
+                <div class="mrp-row">
+                  <span class="mrp-box">₹{{ product.price }}</span>
+                  <span class="discount-text" *ngIf="product.discount">
+                    {{ getDiscountPercentage(product.price, product.discount) }}% Off
+                  </span>
+                </div>
+
+                <div class="selling-price-box">
+                  ₹ {{ product.discount || product.price }}
+                </div>
+              </div>
+            </div>
+
+            <div class="rating-column">
+              <div class="rating-badge-vertical">
+                <div class="star-bg">
+                  <div class="star-wrapper">
+                    <i class="fa-regular fa-star outline-star"></i>
+                    <i
+                      class="fa-solid fa-star fill-star"
+                      [style.--fill-percent]="fillPercent + '%'"
+                    ></i>
+                  </div>
+                </div>
+                <div class="rating-num">
+                  {{ product.rating || 4.5 }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="cart-action-row" (click)="$event.stopPropagation()">
+            <button
+              *ngIf="!isInCart(product)"
+              class="add-to-cart-btn"
+              (click)="addToCart(product)"
+            >
+              Add to Cart
+            </button>
+
+            <div *ngIf="isInCart(product)" class="qty-control">
+              <button (click)="decreaseQty(product)">−</button>
+              <span class="qty-num">{{ getQty(product) }}</span>
+              <button (click)="increaseQty(product)">+</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>

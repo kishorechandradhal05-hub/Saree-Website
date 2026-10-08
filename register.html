@@ -1,0 +1,90 @@
+<div class="top-loader" *ngIf="isLoading"></div>
+
+<div class="register-page">
+  <div class="register-card">
+    
+    <div class="logo-container">
+      <img src="/image/brand_logo.png" class="brand-logo">
+    </div>
+
+    <form (ngSubmit)="registerUser()">
+      
+          <div class="input-group">
+            <div class="label-box">Name</div>
+            <input type="text" [(ngModel)]="Name" name="Name">
+          </div>
+
+          <div class="input-group">
+            <div class="label-box">Address Line 1</div>
+            <textarea rows="2" [(ngModel)]="address_line" name="address_line"></textarea>
+          </div>
+
+
+          <div class="input-group">
+            <div class="label-box">Landmark</div>
+            <input type="text" [(ngModel)]="landmark" name="landmark">
+          </div>
+
+          <div class="input-group">
+            <div class="label-box">Mobile</div>
+            <input type="text" [(ngModel)]="mobile_number" name="mobile_number">
+          </div>
+
+          <div class="input-group">
+            <div class="label-box">State</div>
+            <select [(ngModel)]="state" name="state" (change)="onStateChange()">
+              <option value="" disabled>Select State</option>
+              <option *ngFor="let s of states" [value]="s">{{ s }}</option>
+            </select>
+          </div>
+
+          <div class="input-group">
+
+              <div class="label-box">
+
+                City
+
+              </div>
+
+              <input
+                type="text"
+                [(ngModel)]="city"
+                name="city"
+                placeholder=" Enter City"
+                [disabled]="!state"
+              >
+
+            </div>
+
+          <div class="input-group">
+            <div class="label-box">Pincode</div>
+            <input type="text" [(ngModel)]="pincode" name="pincode">
+          </div>
+        
+
+        <!-- <div class="flex-right">
+          <div class="empty-display-box"></div>
+        </div> -->
+      
+
+        <div class="button-container">
+          <button type="submit" class="submit-btn">Submit</button>
+        </div>
+      </form>
+
+          <div class="login-redirect">
+            <p>Already have an account? <a routerLink="/login">Login</a></p>
+          </div>
+
+  </div>
+
+  <div class="popup-overlay" *ngIf="showPopup">
+    <div class="popup-box" [ngClass]="popupType">
+      <div class="popup-icon">
+        {{ popupType === 'success' ? '✓' : '!' }}
+      </div>
+      <p>{{ popupMessage }}</p>
+      <button (click)="closePopup()">OK</button>
+    </div>
+  </div>
+</div>

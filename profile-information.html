@@ -1,0 +1,75 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="profile-container" *ngIf="!isLoading; else loading">
+
+  <div class="profile-card" *ngIf="userData; else noData">
+    <h2>Profile Information</h2>
+
+    <form (ngSubmit)="updateProfile()">
+
+      <div class="profile-item">
+        <i class="fa fa-user"></i>
+        <span><strong>Name:</strong> {{ userData?.Name || 'N/A' }}</span>
+      </div>
+
+      <!-- <div class="profile-item">
+        <i class="fa fa-envelope"></i>
+        <span><strong>Email:</strong> {{ userData?.mail_id || 'N/A' }}</span>
+      </div> -->
+
+      <div class="profile-item">
+        <i class="fa fa-phone"></i>
+        <span><strong>Phone:</strong> {{ userData?.mobile_number || 'N/A' }}</span>
+      </div>
+
+      <!-- <div class="profile-item">
+        <i class="fa fa-calendar"></i>
+        <span><strong>Registered On:</strong> {{ userData?.registered_date || 'N/A' }}</span>
+      </div> -->
+
+      <div class="btn-group">
+        <button type="submit" class="update-btn">
+          <i class="fa fa-save"></i> Update
+        </button>
+
+        <button type="button" class="logout-btn" (click)="logout()">
+          <i class="fa fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- POPUP -->
+<div class="popup-overlay" *ngIf="showPopup">
+  <div class="popup-box">
+
+    <i class="fa"
+       [ngClass]="popupType === 'success'
+       ? 'fa-circle-check success-icon'
+       : 'fa-circle-exclamation error-icon'">
+    </i>
+
+    <h3>{{ popupMessage }}</h3>
+
+    <button (click)="onPopupOk()">OK</button>
+
+  </div>
+</div>
+
+<!-- Loading -->
+<ng-template #loading>
+  <div class="loader">
+    <i class="fa fa-spinner fa-spin"></i> Loading profile...
+  </div>
+</ng-template>
+
+<!-- No Data -->
+<ng-template #noData>
+  <div class="loader">
+    <i class="fa fa-exclamation-triangle"></i> No profile information found.
+  </div>
+</ng-template>
